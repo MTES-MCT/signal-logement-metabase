@@ -25,29 +25,12 @@ origin    git@github.com:MTES-MCT/signal-logement-metabase.git
 scalingo  git@ssh.osc-fr1.scalingo.com:signal-logement-metabase.git
 ```
 
-### Déployer
-
-La branche principale du projet est `main`.
-
-```bash
-git push scalingo main
-```
-
 ## Mise à jour de Metabase
 
 La version de Metabase est récupérée par le buildpack Metabase lors du déploiement.
 
-Pour redéployer depuis la dernière version disponible sur GitHub :
-
-```bash
-git checkout main
-git pull origin main
-git push scalingo main
-```
-
 Le buildpack Metabase est disponible ici :
 https://github.com/metabase/metabase-buildpack
-
 
 ### Workflow Git
 
@@ -170,6 +153,29 @@ OAUTH2_PROXY_SKIP_AUTH_ROUTES=^/public/.*,^/api/public/.*,^/app/.*,^/api/session
 
 ### Déploiement
 
+### Forcer une version lors du déploiement
+
+Pour les hotfix en particulier, il est parfois intéressant de forcer une version spécifique de Metabase.
+
+Pour cela, il faut éditer la variable d'environnement suivante directement dans Scalingo : `METABASE_VERSION`.
+
+### Commande
+
+#### Deploy depuis la cli Scalingo
+
 ```bash
+scalingo --app signal-logement-metabase deploy https://github.com/MTES-MCT/signal-logement-metabase/archive/refs/heads/main.tar.gz
+```
+
+#### Deploy depuis la cli Scalingo
+
+Cette version comporte l'inconvénient de devoir forcer un commit vide vers Scalingo, et devoir rappatrier les commit des autres contributeurs.
+
+Par ailleurs, le déploiement est aléatoire côté Scalingo à cause des commit vides.
+
+```bash
+git checkout main
+git pull origin main
+git commit --allow-empty -m "empty commit"
 git push scalingo main
 ```
